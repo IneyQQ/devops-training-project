@@ -19,15 +19,6 @@ pipeline {
         label "master"
     }
     stages {
-        stage("Clone repo") {
-            steps {
-                deleteDir()
-                checkout scm: [
-                    $class: 'GitSCM', branches: [[name: '*/master']],
-                    userRemoteConfigs: [[url: 'https://github.com/IneyQQ/devops-training-project']]
-                ]
-            }
-        }
         stage("Build") {
             steps {
                 dir("backend") {
