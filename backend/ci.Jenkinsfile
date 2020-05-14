@@ -1,9 +1,6 @@
-next_version = params.version
-if (params.version != null) {
-    try {
-        next_version = (params.version.toInteger() + 1).toString()
-    } catch (Exception e) {}
-}
+import java.time.*
+
+def version = "${BUILD_NUMBER}.${new Date().format('yyyy-MM-dd_HH-mm')}"
 
 pipeline {
     parameters {
@@ -12,7 +9,6 @@ pipeline {
     
     environment {
         gradle_skip_analysis = "-x findbugsMain -x findbugsTest -x pmdMain -x pmdTest -x checkstyleMain -x checkstyleTest"
-        
     }
     
     agent {
@@ -22,14 +18,14 @@ pipeline {
         stage("Build") {
             steps {
                 dir("backend") {
-                    sh "./gradlew build -Pversion=${params.version} -x test ${gradle_skip_analysis}"
+                    sh "./gradlew build -Pversion=${version} -x test ${gradle_skip_analysis}"
                 }
             }
         }
         stage("Test") {
             steps {
                 dir("backend") {
-                    sh "./gradlew test -Pversion=${params.version} ${gradle_skip_analysis} || true"
+                    sh "./gradlew test -Pversion=${version} ${gradle_skip_analysis} || true"
                 }
             }
         }
@@ -49,8 +45,8 @@ pipeline {
                         nexusRepositoryId: 'maven-releases',
                         packages: [[
                             $class: 'MavenPackage',
-                            mavenAssetList: [[classifier: '', extension: '', filePath: "./build/libs/backend-${params.version}.jar"]],
-                            mavenCoordinate: [groupId: 'issoft.training', artifactId: 'backend', version: params.version, packaging: 'jar']
+                            mavenAssetList: [[classifier: '', extension: '', filePath: "./build/libs/backend-${version}.jar"]],
+                            mavenCoordinate: [groupId: 'issoft.training', artifactId: 'backend', version: version, packaging: 'jar']
                         ]]
                 }
             }
@@ -58,7 +54,7 @@ pipeline {
         stage("Trigger deploy") {
 	    steps {
                 build job: "backend-cd-multibranch/${env.BRANCH_NAME}/",
-		    parameters: [[$class: 'StringParameterValue', name: 'version', value: env.version]],
+		    parameters: [[$class: 'StringParameterValue', name: 'version', value: version]],
 		    wait: false
 	    }
 	}
