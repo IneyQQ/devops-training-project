@@ -33,7 +33,7 @@ pipeline {
                                         -u ${USERPASS} \
                                         | grep -Po '"downloadUrl" : "\\K.+(?=",)' \
                                         | sudo xargs curl -fsSL -o backend.jar -u ${USERPASS}
-                                    systemctl restart backend
+                                    sudo systemctl restart backend
                                 EOF
                                 """.stripIndent()
                             }
