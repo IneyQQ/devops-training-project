@@ -3,9 +3,6 @@ import java.time.*
 def version = "${BUILD_NUMBER}.${new Date().format('yyyy-MM-dd_HH-mm')}"
 
 pipeline {
-    parameters {
-        string(name: 'version', defaultValue: next_version, description: 'Artifact version. Integer value')
-    }
     
     environment {
         gradle_skip_analysis = "-x findbugsMain -x findbugsTest -x pmdMain -x pmdTest -x checkstyleMain -x checkstyleTest"
