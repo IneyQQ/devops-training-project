@@ -1,7 +1,10 @@
 project_environment_servers = [
-  dev:  [ '10.0.3.96' ],
-  prod: [ '10.0.3.48' ]
+  dev:  [ '10.0.3.96' ]
 ]
+
+if (BRANCH_NAMME == master) {
+  project_environment_servers['prod'] = [ '10.0.3.48' ]
+}
 
 pipeline {
     agent {
