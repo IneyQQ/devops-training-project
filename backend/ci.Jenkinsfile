@@ -14,7 +14,9 @@ pipeline {
     stages {
         stage("Build") {
             steps {
-	        currentBuild.displayName = version
+	        script {
+	            currentBuild.displayName = version
+		}
                 dir("backend") {
                     sh "./gradlew build -Pversion=${version} -x test ${gradle_skip_analysis}"
                 }
