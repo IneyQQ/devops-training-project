@@ -2,7 +2,7 @@ project_environment_servers = [
   dev:  [ '10.0.3.96' ]
 ]
 
-if (BRANCH_NAMME == master) {
+if (BRANCH_NAME == master) {
   project_environment_servers['prod'] = [ '10.0.3.48' ]
 }
 
