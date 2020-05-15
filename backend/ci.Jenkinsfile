@@ -1,6 +1,6 @@
 import java.time.*
 
-def version = "${BUILD_NUMBER}.${new Date().format('yyyy-MM-dd_HH-mm')}"
+def version = "${BRANCH_NAME}.${BUILD_NUMBER}.${new Date().format('yyyy-MM-dd_HH-mm')}"
 
 pipeline {
     
