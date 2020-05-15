@@ -20,6 +20,7 @@ pipeline {
     stages {
         stage("Test") {
             steps {
+	        currentBuild.displayName = "${version} to ${environment}"
                 script {
                     sshagent(credentials : ['ubuntu-slave']) {
                         withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
