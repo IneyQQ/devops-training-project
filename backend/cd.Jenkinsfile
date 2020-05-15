@@ -10,7 +10,7 @@ pipeline {
     
     parameters {
         string(name: 'version', description: "Version of nexus artifact")
-	choice(name: 'environment', choices: project_environment_servers.keySet() as String[])
+	choice(name: 'environment', choices: project_environment_servers.keySet() as ArrayList)
     }
 
     options {
