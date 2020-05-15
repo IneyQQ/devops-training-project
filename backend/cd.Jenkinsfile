@@ -1,10 +1,16 @@
+project_environment_servers = [
+  dev:  [ '10.0.3.96' ],
+  prod: [ '10.0.3.48' ]
+]
+
 pipeline {
     agent {
         label 'master'
     }
     
     parameters {
-        string(name: 'version', description: "Version of nexus artifact")
+        string(name: 'version', description: "Version of nexus artifact"),
+	choice(name: 'environment', choices: project_environment_servers.keySet() as String[])
     }
 
     options {
@@ -18,7 +24,7 @@ pipeline {
                     sshagent(credentials : ['ubuntu-slave']) {
                         withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
  
-                            slaves = [ '10.0.3.145' ]
+                            slaves = project_environment_servers[params.environment]
                             for (slave in slaves) {
                                 sh """\
                                 ssh -o StrictHostKeyChecking=no ubuntu@${slave} <<EOF

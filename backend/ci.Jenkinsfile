@@ -50,9 +50,14 @@ pipeline {
         }
         stage("Trigger deploy") {
 	    steps {
-                build job: "backend-cd-multibranch/${env.BRANCH_NAME}/",
-		    parameters: [[$class: 'StringParameterValue', name: 'version', value: version]],
-		    wait: false
+	        script {
+                    build job: "backend-cd-multibranch/${env.BRANCH_NAME}/",
+		        parameters: [
+		            [$class: 'StringParameterValue', name: 'version', value: version],
+		            [$class: 'StringParameterValue', name: 'environment', value: (env.BRANCH_NAME == 'master') ? 'prod' : 'dev']
+		        ],
+		        wait: false
+		}
 	    }
 	}
     }
